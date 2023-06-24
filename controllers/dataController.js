@@ -1,11 +1,19 @@
 const { isUser } = require('../middlewares/guards.js');
-const { getAll, create, getById, update, del } = require('../services/itemService.js');
+const { getAll, create, getById, update, del, getByUserId } = require('../services/itemService.js');
 const { parseError } = require('../util/parser.js');
 
 const dataController = require('express').Router();
 
 dataController.get('/', async (req, res) => {
-	const items = await getAll();
+	let items = [];
+
+	if (req.query.where) {
+		const userId = JSON.parse(req.query.where.split('=')[1]);
+    items = await getByUserId(userId)
+	} else {
+		items = await getAll();
+	}
+
 	res.json(items);
 });
 
