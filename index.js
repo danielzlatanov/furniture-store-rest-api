@@ -1,12 +1,29 @@
 const express = require('express');
 const cors = require('./middlewares/cors.js');
+const { mongoose } = require('mongoose');
 
-const app = express();
-app.use(express.json());
-app.use(cors());
+const connectionString = 'mongodb://localhost:27017/furniture';
 
-app.get('/', (req, res) => {
-	res.json({ message: 'REST service operational' });
-});
+start();
+async function start() {
+	try {
+		await mongoose.connect(connectionString, {
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+		});
+		console.log('Database connected');
+	} catch (err) {
+		console.error('DB Error ->' + err.message);
+		process.exit(1);
+	}
 
-app.listen(3030, () => console.log('REST service started'));
+	const app = express();
+	app.use(express.json());
+	app.use(cors());
+
+	app.get('/', (req, res) => {
+		res.json({ message: 'REST service operational' });
+	});
+
+	app.listen(3030, () => console.log('REST service started'));
+}
