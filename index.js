@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const authController = require('./controllers/authController.js');
 const dataController = require('./controllers/dataController.js');
 const session = require('./middlewares/session.js');
+const trimBody = require('./middlewares/trimBody.js');
 
 const connectionString = 'mongodb://localhost:27017/furniture';
 
@@ -23,6 +24,7 @@ async function start() {
 	const app = express();
 	app.use(express.json());
 	app.use(cors());
+	app.use(trimBody());
 	app.use(session());
 
 	app.get('/', (req, res) => {
