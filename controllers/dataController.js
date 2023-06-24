@@ -1,3 +1,4 @@
+const { isUser } = require('../middlewares/guards.js');
 const { getAll, create } = require('../services/itemService.js');
 const { parseError } = require('../util/parser.js');
 
@@ -8,7 +9,7 @@ dataController.get('/', async (req, res) => {
 	res.json(items);
 });
 
-dataController.post('/', async (req, res) => {
+dataController.post('/', isUser(), async (req, res) => {
 	try {
 		const data = Object.assign({ _ownerId: req.user._id }, req.body);
 		const item = await create(data);
