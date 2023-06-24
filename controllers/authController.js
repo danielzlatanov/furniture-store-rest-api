@@ -1,4 +1,4 @@
-const { register, login } = require('../services/userService.js');
+const { register, login, logout } = require('../services/userService.js');
 
 const authController = require('express').Router();
 
@@ -18,6 +18,12 @@ authController.post('/login', async (req, res) => {
 	} catch (error) {
 		res.status(401).json({ message: error.message });
 	}
+});
+
+authController.get('/logout', async (req, res) => {
+	const token = req.token;
+	await logout(token);
+	res.status(204).end();
 });
 
 module.exports = authController;

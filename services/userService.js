@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User.js');
 
 const jwtSecret = 'super-secret-stuff-101';
+const tokenBlacklist = new Set();
 
 async function register(email, password) {
 	const existing = await User.findOne({ email }).collation({ locale: 'en', strength: 2 });
@@ -32,7 +33,9 @@ async function login(email, password) {
 	return createToken(user);
 }
 
-async function logout() {}
+async function logout(token) {
+	tokenBlacklist.add(token);
+}
 
 function createToken({ _id, email }) {
 	const payload = {
@@ -47,7 +50,13 @@ function createToken({ _id, email }) {
 	};
 }
 
-function parseToken(token) {}
+function parseToken(token) {
+	if (tokenBlacklist.has(token)) {
+		throw new Error('Token is blacklisted');
+	}
+
+	return jwt.verify(token, jwtSecret);
+}
 
 module.exports = {
 	register,

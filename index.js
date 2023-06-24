@@ -3,6 +3,7 @@ const cors = require('./middlewares/cors.js');
 const mongoose = require('mongoose');
 const authController = require('./controllers/authController.js');
 const dataController = require('./controllers/dataController.js');
+const session = require('./middlewares/session.js');
 
 const connectionString = 'mongodb://localhost:27017/furniture';
 
@@ -22,6 +23,7 @@ async function start() {
 	const app = express();
 	app.use(express.json());
 	app.use(cors());
+	app.use(session());
 
 	app.get('/', (req, res) => {
 		res.json({ message: 'REST service operational' });
