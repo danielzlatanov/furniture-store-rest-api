@@ -1,6 +1,6 @@
 const { Schema, model, Types } = require('mongoose');
 
-const imgPattern = /https?:\/\/.*/i;
+const imgPattern = /^\/{1}/i;
 
 const itemSchema = new Schema({
 	make: { type: String, required: true, minLength: [4, 'Make must be at least 4 characters long'] },
@@ -18,7 +18,7 @@ const itemSchema = new Schema({
 		required: true,
 		validate: {
 			validator: val => val.match(imgPattern),
-			message: 'Image url should start with http:// or https://',
+			message: 'Image url should start with "/"',
 		},
 	},
 	material: { type: String, default: '' },
