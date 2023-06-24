@@ -1,5 +1,5 @@
 const { isUser } = require('../middlewares/guards.js');
-const { getAll, create } = require('../services/itemService.js');
+const { getAll, create, getById } = require('../services/itemService.js');
 const { parseError } = require('../util/parser.js');
 
 const dataController = require('express').Router();
@@ -18,6 +18,11 @@ dataController.post('/', isUser(), async (req, res) => {
 		const message = parseError(error);
 		res.status(400).json({ message });
 	}
+});
+
+dataController.get('/:id', async (req, res) => {
+	const item = await getById(req.params.id);
+	res.json(item);
 });
 
 module.exports = dataController;
