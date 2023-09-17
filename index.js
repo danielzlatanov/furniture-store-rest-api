@@ -34,5 +34,5 @@ async function start() {
 	app.use('/users', authController);
 	app.use('/data/catalog', dataController);
 
-	app.listen(3030, () => console.log('REST service started'));
+	app.listen(3030, () => console.log('REST service started, access it here: http://localhost:3030'));
 }
